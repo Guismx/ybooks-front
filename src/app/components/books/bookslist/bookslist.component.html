@@ -1,0 +1,37 @@
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="direita">
+                        <button class="login-button" type="submit" mdbRipple routerLink="/admin/books/edit/new">Novo</button>
+                    </div>
+                    <br>
+                    <table border="1" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (book of lista; track $index) {
+                                <tr>
+                                    <td>{{book.id}}</td>
+                                    <td>{{book.title}}</td>
+                                    <td class="editaredeletar">
+                                        <button class="login-button" type="submit" mdbRipple routerLink="/admin/books/edit/{{book.id}}">Editar</button>
+
+                                        <button class="login-button2" type="submit" (click)="deletar(book)">Deletar</button>
+                                    </td>
+                                </tr>
+                            }                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
