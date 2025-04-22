@@ -13,7 +13,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nome</th>
-                                <th>Ações</th>
+                                <th class="nome">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,7 +24,7 @@
                                     <td class="editaredeletar">
                                         <button class="login-button" type="submit" mdbRipple routerLink="/admin/books/edit/{{book.id}}">Editar</button>
 
-                                        <button class="login-button2" type="submit" (click)="deletar(book)">Deletar</button>
+                                        <button class="login-button2" type="submit" (click)="deleteBook(book)">Deletar</button>
                                     </td>
                                 </tr>
                             }                

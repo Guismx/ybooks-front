@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Book } from '../../models/book';
 import { RouterLink } from '@angular/router';
 import { BookService } from '../../../services/book.service';
+import { asapScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-bookslist',
@@ -21,6 +22,7 @@ export class BookslistComponent {
     this.listAll();
   }
 
+  //Para cada método que esta no backend de books, implementar ele aqui
   listAll() {
     this.bookService.listAll().subscribe({
       next: lista => {
@@ -31,9 +33,6 @@ export class BookslistComponent {
       }
     });
   
-
-   
-
 
     let bookNovo = history.state.bookNovo;
     let bookEditado = history.state.bookEditado;
@@ -49,12 +48,19 @@ export class BookslistComponent {
     }
     
   }
-  deletar(book: Book) {
+  deleteBook(book: Book): void {
     if (confirm("Tem certeza que deseja deletar este registro?")) {
-      let indice = this.lista.findIndex(x => x.id === book.id); // ✅ Corrigido erro de fechamento de parênteses.
-      if (indice !== -1) { // ✅ Adicionada verificação para evitar erro ao tentar remover item inexistente.
-        this.lista.splice(indice, 1);
-      }
+      this.bookService.deleteBook(book.id).subscribe({
+        next: (mensagem: string) => {
+          alert(mensagem);
+          this.listAll();
+        },        
+        error: (erro) => {
+          console.error('Erro completo ao deletar livro:', erro);
+          alert(erro.error || 'Erro ao deletar livro');
+        }
+        
+      });
     }
   }
 }

@@ -18,4 +18,10 @@ export class BookService {
    listAll(): Observable<Book[]>{
     return this.http.get<Book[]>(this.API+"/listAll");
   }
+
+
+  //Sempre que o retorno for String adicionar o responseType
+  deleteBook(id: number): Observable<string>{
+    return this.http.delete<string>(this.API+"/delete/"+id, {responseType: 'text' as 'json'});
+  }
 }
