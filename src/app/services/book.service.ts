@@ -12,15 +12,14 @@ export class BookService {
 
   API = "http://localhost:8080/ybook/book";
 
-  constructor() {
-  }
+  constructor() {}
   //Sempre que o retorno for String adicionar o responseType
   createBook(book: Book): Observable<string>{
-    return this.http.post<string>(this.API+"/create", Book, {responseType: 'text' as 'json'})
+    return this.http.post<string>(this.API+"/create", book, {responseType: 'text' as 'json'})
   }
 
   updateBook(book: Book, id: number): Observable<string>{
-    return this.http.put<string>(this.API+"/update"+id, book, {responseType: 'text' as 'json'});
+    return this.http.put<string>(this.API+"/update/"+id, book, {responseType: 'text' as 'json'});
   }
 
   deleteBook(id: number): Observable<string>{
@@ -32,11 +31,11 @@ export class BookService {
   }
 
   bookById(id: number): Observable<Book>{
-    return this.http.get<Book>(this.API+"findbook"+id);
+    return this.http.get<Book>(this.API+"/findbook/"+id);
   }
 
   findByCategory(category: string): Observable<Book>{
-    return this.http.get<Book>(this.API+"/findbycategory"+category);
+    return this.http.get<Book>(this.API+"/findbycategory/"+category);
   }
 
 }

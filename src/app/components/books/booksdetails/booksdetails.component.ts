@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Book } from '../../models/book';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookService } from '../../../services/book.service';
 
 @Component({
   selector: 'app-booksdetails',
@@ -12,9 +13,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BooksdetailsComponent {
 
-  book: Book = new Book(0, "");
+  @Input("book") book: Book = new Book(0, "");
+  @Output("retorno") retorno = new EventEmitter<any>();
   router = inject(ActivatedRoute);
   router2 = inject(Router);
+
+  bookService = inject(BookService);
 
 
   constructor(){
@@ -25,20 +29,39 @@ export class BooksdetailsComponent {
   }
 
   findById(id: number) {
-    let bookRetornado: Book = new Book(id, "Senhor dos anéis");
-    this.book = bookRetornado;
+    this.bookService.bookById(id).subscribe({
+      next: retorno => {
+        this.book = retorno;
+      },
+      error: erro => {
+        alert("Não foi possível encontrar o livro");
+      }
+    });
   }
 
-  save () {
+  save() {
     if(this.book.id > 0 ){
-      alert("Livro editado com sucesso!");
-      this.router2.navigate(['admin/books'], {state: { bookEditado: this.book }})
-
+      this.bookService.updateBook(this.book, this.book.id).subscribe({
+        next: message => {
+          return message;
+        },
+        error: erro => {
+          alert("Não foi possível atualizar os dados do livro");
+        }
+      });
+      this.router2.navigate(['admin/books'],  {state: { bookNovo: this.book }});
     } else {
-      alert("Livro salvo com sucesso!");
-      this.router2.navigate(['admin/books'],  {state: { bookNovo: this.book }})
+      this.bookService.createBook(this.book).subscribe({
+        next: message => {
+          return message;          
+        this.router2.navigate(['admin/books'],  {state: { bookNovo: this.book }});
+        },
+        error: erro => {
+          alert("Não foi possível criar um novo livro");
+        }
+     })
     }
-
   }
-
 }
+
+// this.router2.navigate(['admin/books'],  {state: { bookNovo: this.book }})
